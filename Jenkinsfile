@@ -1,31 +1,42 @@
 pipeline {
     agent any
+
+    environment {
+        IMAGE_NAME = "python-print-app"
+    }
+
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/votre-compte/TestApp.git'
+                git 'https://github.com/saldjadounia/TestApp'
             }
         }
+
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("python-print-app:latest")
+                    dockerImage = docker.build("${IMAGE_NAME}")
                 }
             }
         }
+
         stage('Run Container') {
             steps {
-                sh 'docker rm -f python-print-app || true'
-                sh 'docker run --name python-print-app python-print-app:latest'
+                script {
+                    sh 'docker rm -f python-print-app || true'
+                    sh 'docker run --name python-print-app python-print-app'
+                }
             }
         }
     }
+
     post {
         success {
-            echo '✅ Pipeline réussi !'
+            echo "Pipeline terminé avec succès !"
         }
         failure {
-            echo '❌ Pipeline échoué.'
+            echo "Pipeline échoué."
         }
     }
 }
+
