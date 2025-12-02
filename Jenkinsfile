@@ -10,13 +10,13 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                bat 'docker build -t my-python-app .'
+                sh 'docker build -t my-python-app .'
             }
         }
 
         stage('Run Container') {
             steps {
-                bat 'docker run --rm my-python-app'
+                sh 'docker run --rm my-python-app'
             }
         }
     }
